@@ -5,8 +5,8 @@ RUN pacman -S --noconfirm reflector
 RUN reflector --verbose --protocol "https,http,ftp" --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
 RUN pacman -S --noconfirm base-devel pacman-contrib git sudo
 
-RUN sed -i '/MAKEFLAGS=/s/^#//g' /etc/makepkg.conf
-RUN sed -i '/MAKEFLAGS/s/-j1/-j$(($(nproc)+1))/g' /etc/makepkg.conf
+RUN sed -i -e 's/.*MAKEFLAGS.*/MAKEFLAGS=$(($(nproc)+1))/g' /etc/makepkg.conf
+RUN sed -i -e 's/-O[s0123]/-O3/g' /etc/makepkg.conf
 
 RUN useradd -m builduser
 RUN echo 'builduser ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builduser
